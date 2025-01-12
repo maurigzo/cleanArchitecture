@@ -16,8 +16,8 @@ final class PokemonRepository: PokemonListRepositoryType {
         self.errorMapper = errorMapper
     }
 
-    func fetchPokemonList() async -> AnyPublisher<[Pokemon], DomainError> {
-        await dataSource.fetchPokemonDetails()
+    func fetchPokemonList() -> AnyPublisher<[Pokemon], DomainError> {
+        dataSource.fetchPokemonDetails()
             .map { pokemonDetails in
                 pokemonDetails.map { pokemonDTO in
                     Pokemon(id: pokemonDTO.id, name: pokemonDTO.name)

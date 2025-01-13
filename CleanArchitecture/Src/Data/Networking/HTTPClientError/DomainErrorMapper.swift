@@ -7,6 +7,17 @@
 
 final class DomainErrorMapper {
     func map(error: HTTPClientError?) -> DomainError {
-        return .generic
+        switch error {
+        case .parsingError:
+            return .parsingError
+        case .clientError:
+            return .clientError
+        case .tooManyRequestsError:
+            return .tooManyRequestsError
+        case .serverError:
+            return .serverError
+        default:
+            return .generic
+        }
     }
 }

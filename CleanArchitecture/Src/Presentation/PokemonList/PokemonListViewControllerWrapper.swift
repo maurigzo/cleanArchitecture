@@ -9,11 +9,18 @@ import SwiftUI
 import UIKit
 
 struct PokemonListViewControllerWrapper: UIViewControllerRepresentable {
-    let viewModel: PokemonListViewModel
+    @ObservedObject var viewModel: PokemonListViewModel
+    private let navigationController = UINavigationController()
 
-    func makeUIViewController(context: Context) -> PokemonListViewController {
-        PokemonListViewController(viewModel: viewModel)
+    func makeUIViewController(context: Context) -> UINavigationController {
+        let coordinator = context.coordinator
+        coordinator.start()
+        return navigationController
     }
 
-    func updateUIViewController(_ uiViewController: PokemonListViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(navigationController: navigationController, viewModel: viewModel)
+    }
 }

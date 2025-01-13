@@ -13,7 +13,9 @@ extension Publisher where Output == Data, Failure == HTTPClientError {
         self
             .tryMap { data in
                 do {
-                    return try JSONDecoder().decode(T.self, from: data)
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    return try decoder.decode(T.self, from: data)
                 } catch {
                     throw HTTPClientError.parsingError
                 }

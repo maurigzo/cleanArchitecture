@@ -8,4 +8,5 @@
 struct PokemonDTO: Codable {
     let id: Int
     let name: String
+    let abilities: [AbilityDTO]
 }

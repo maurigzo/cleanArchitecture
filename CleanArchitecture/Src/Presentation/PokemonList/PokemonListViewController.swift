@@ -11,11 +11,13 @@ import Combine
 class PokemonListViewController: UIViewController {
     private let tableView = UITableView()
     private let viewModel: PokemonListViewModel
+    private let coordinator: Coordinator
     private var cancellables = Set<AnyCancellable>()
     private var pokemons: [Pokemon] = []
 
-    init(viewModel: PokemonListViewModel) {
+    init(viewModel: PokemonListViewModel, coordinator: Coordinator) {
         self.viewModel = viewModel
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -70,6 +72,6 @@ extension PokemonListViewController: UITableViewDataSource, UITableViewDelegate 
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let pokemon = pokemons[indexPath.row]
-        viewModel.didSelectPokemon(pokemon)
+        coordinator.showPokemonDetail(for: pokemon)
     }
 }

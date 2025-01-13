@@ -6,5 +6,9 @@
 //
 
 enum DomainError: Error {
+    case parsingError
     case generic
+    case clientError
+    case tooManyRequestsError
+    case serverError
 }

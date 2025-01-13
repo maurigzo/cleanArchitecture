@@ -20,7 +20,7 @@ final class PokemonRepository: PokemonListRepositoryType {
         dataSource.fetchPokemonDetails()
             .map { pokemonDetails in
                 pokemonDetails.map { pokemonDTO in
-                    Pokemon(id: pokemonDTO.id, name: pokemonDTO.name)
+                    Pokemon.build(from: pokemonDTO)
                 }
             }
             .catch{ [weak self] error in

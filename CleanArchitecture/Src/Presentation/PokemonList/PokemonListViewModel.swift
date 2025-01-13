@@ -29,6 +29,4 @@ class PokemonListViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
-
-    func didSelectPokemon(_ pokemon: Pokemon) {}
 }

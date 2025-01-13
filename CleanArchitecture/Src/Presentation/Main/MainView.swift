@@ -22,7 +22,6 @@ struct MainView: View {
             VStack {
                 if viewModel.userLoggedIn {
                     PokemonListViewControllerWrapper(viewModel: PokemonListViewModel())
-                    RafflesView(viewModel: RafflewsViewModel())
                         .toolbar {
                             ToolbarItem(placement: .topBarTrailing) {
                                 Text(verbatim: .logout)

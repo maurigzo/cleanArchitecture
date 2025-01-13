@@ -14,7 +14,7 @@ class PokemonListViewModel: ObservableObject {
 //    private let coordinator: AppCoordinator
     private var cancellables = Set<AnyCancellable>()
 
-    init(repository: PokemonListRepositoryType/*, coordinator: AppCoordinator*/) {
+    init(repository: PokemonListRepositoryType = PokemonRepository()/*, coordinator: AppCoordinator*/) {
         self.repository = repository
 //        self.coordinator = coordinator
     }

@@ -11,12 +11,10 @@ import Foundation
 class PokemonListViewModel: ObservableObject {
     @Published var pokemons: [Pokemon] = []
     private let repository: PokemonListRepositoryType
-//    private let coordinator: AppCoordinator
     private var cancellables = Set<AnyCancellable>()
 
-    init(repository: PokemonListRepositoryType = PokemonRepository()/*, coordinator: AppCoordinator*/) {
+    init(repository: PokemonListRepositoryType = PokemonRepository()) {
         self.repository = repository
-//        self.coordinator = coordinator
     }
 
     func fetchPokemonList() {
@@ -32,7 +30,5 @@ class PokemonListViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func didSelectPokemon(_ pokemon: Pokemon) {
-//        coordinator.navigateToPokemonDetail(pokemon: pokemon)
-    }
+    func didSelectPokemon(_ pokemon: Pokemon) {}
 }

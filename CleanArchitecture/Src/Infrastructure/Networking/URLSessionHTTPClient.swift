@@ -12,7 +12,7 @@ final class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
     private let errorResolver: URLSessionErrorResolver
     
-    init(session: URLSession = .shared, errorResolver: URLSessionErrorResolver) {
+    init(session: URLSession = .shared, errorResolver: URLSessionErrorResolver = URLSessionErrorResolver()) {
         self.session = session
         self.errorResolver = errorResolver
     }

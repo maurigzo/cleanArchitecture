@@ -21,6 +21,7 @@ struct MainView: View {
         NavigationView {
             VStack {
                 if viewModel.userLoggedIn {
+                    PokemonListViewControllerWrapper(viewModel: PokemonListViewModel())
                     RafflesView(viewModel: RafflewsViewModel())
                         .toolbar {
                             ToolbarItem(placement: .topBarTrailing) {

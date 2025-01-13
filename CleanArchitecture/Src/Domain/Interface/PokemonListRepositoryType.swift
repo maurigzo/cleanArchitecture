@@ -8,5 +8,5 @@
 import Combine
 
 protocol PokemonListRepositoryType {
-    func fetchPokemonList() async -> AnyPublisher<[Pokemon], DomainError>
+    func fetchPokemonList() -> AnyPublisher<[Pokemon], DomainError>
 }

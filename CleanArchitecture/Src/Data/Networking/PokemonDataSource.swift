@@ -11,7 +11,7 @@ import Foundation
 final class PokemonDataSource: PokemonDataSourceType {
     private let httpClient: HTTPClient
     
-    init(httpClient: HTTPClient) {
+    init(httpClient: HTTPClient = URLSessionHTTPClient()) {
         self.httpClient = httpClient
     }
 

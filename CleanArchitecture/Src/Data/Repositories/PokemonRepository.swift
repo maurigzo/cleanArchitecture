@@ -11,13 +11,13 @@ final class PokemonRepository: PokemonListRepositoryType {
     private let dataSource: PokemonDataSourceType
     private let errorMapper: DomainErrorMapper
 
-    init(dataSource: PokemonDataSourceType, errorMapper: DomainErrorMapper) {
+    init(dataSource: PokemonDataSourceType = PokemonDataSource(), errorMapper: DomainErrorMapper = DomainErrorMapper()) {
         self.dataSource = dataSource
         self.errorMapper = errorMapper
     }
 
-    func fetchPokemonList() async -> AnyPublisher<[Pokemon], DomainError> {
-        await dataSource.fetchPokemonDetails()
+    func fetchPokemonList() -> AnyPublisher<[Pokemon], DomainError> {
+        dataSource.fetchPokemonDetails()
             .map { pokemonDetails in
                 pokemonDetails.map { pokemonDTO in
                     Pokemon(id: pokemonDTO.id, name: pokemonDTO.name)
@@ -29,11 +29,5 @@ final class PokemonRepository: PokemonListRepositoryType {
                     .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
-    }
-}
-
-final class DomainErrorMapper {
-    func map(error: HTTPClientError?) -> DomainError {
-        return .generic
     }
 }

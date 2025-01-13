@@ -15,6 +15,12 @@ struct PokemonDetailView: View {
     }
     
     var body: some View {
-        Text(pokemon.name)
+        VStack {
+            Text(pokemon.name)
+            Text("Abilities:")
+            ForEach(pokemon.abilities, id: \.self) { ability in
+                Text(ability.ability.name)
+            }
+        }
     }
 }

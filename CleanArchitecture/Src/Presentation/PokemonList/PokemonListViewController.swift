@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 class PokemonListViewController: UIViewController {
-    private let tableView = UITableView()
+    private let collectionView: UICollectionView
     private let viewModel: PokemonListViewModel
     private let coordinator: Coordinator
     private var cancellables = Set<AnyCancellable>()
@@ -18,6 +18,14 @@ class PokemonListViewController: UIViewController {
     init(viewModel: PokemonListViewModel, coordinator: Coordinator) {
         self.viewModel = viewModel
         self.coordinator = coordinator
+
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 20, height: 200)
+        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -27,23 +35,23 @@ class PokemonListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTableView()
+        setupCollectionView()
         bindViewModel()
         viewModel.fetchPokemonList()
     }
 
-    private func setupTableView() {
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "PokemonCell")
-
+    private func setupCollectionView() {
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.backgroundColor = .systemGray6
+        collectionView.register(PokemonCollectionViewCell.self, forCellWithReuseIdentifier: "PokemonCell")
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
@@ -52,26 +60,31 @@ class PokemonListViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] pokemons in
                 self?.pokemons = pokemons
-                self?.tableView.reloadData()
+                self?.collectionView.reloadData()
             }
             .store(in: &cancellables)
     }
 }
 
-extension PokemonListViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension PokemonListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         pokemons.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCell", for: indexPath)
-        let pokemon = pokemons[indexPath.row]
-        cell.textLabel?.text = pokemon.name
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "PokemonCell",
+            for: indexPath
+        ) as? PokemonCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        let pokemon = pokemons[indexPath.item]
+        cell.update(with: pokemon)
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let pokemon = pokemons[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let pokemon = pokemons[indexPath.item]
         coordinator.showPokemonDetail(for: pokemon)
     }
 }

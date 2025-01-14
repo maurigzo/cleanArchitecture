@@ -9,4 +9,16 @@ struct PokemonDTO: Codable {
     let id: Int
     let name: String
     let abilities: [AbilityDTO]
+    let types: [PokemonTypeDTO]
+    let sprites: SpritesDTO
+    let weight: Double
+    let height: Double
+}
+
+struct PokemonTypeDTO: Codable {
+    let type: PokemonTypeDetailsDTO
+}
+
+struct PokemonTypeDetailsDTO: Codable {
+    let name: String
 }

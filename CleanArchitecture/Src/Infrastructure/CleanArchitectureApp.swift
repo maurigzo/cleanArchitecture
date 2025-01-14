@@ -11,7 +11,8 @@ import SwiftUI
 struct CleanArchitectureApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView(viewModel: MainViewModel())
+            PokemonListViewControllerWrapper(viewModel: PokemonListViewModel())
+                .background(Color(cgColor: UIColor.secondarySystemBackground.cgColor))
         }
     }
 }

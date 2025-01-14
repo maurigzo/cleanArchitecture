@@ -7,10 +7,10 @@
 
 import Combine
 
-final class FetchPokemonListUseCase {
+final class FetchPokemonListUseCase: FetchPokemonListUseCaseType {
     private let pokemonListRepository: PokemonListRepositoryType
     
-    init(pokemonListRepository: PokemonListRepositoryType) {
+    init(pokemonListRepository: PokemonListRepositoryType = PokemonListRepository()) {
         self.pokemonListRepository = pokemonListRepository
     }
 

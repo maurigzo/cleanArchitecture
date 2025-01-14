@@ -7,18 +7,13 @@
 
 import Combine
 import Foundation
+import UIKit
 
 final class PokemonDataSource: PokemonDataSourceType {
     private let httpClient: HTTPClient
-    
+
     init(httpClient: HTTPClient = URLSessionHTTPClient()) {
         self.httpClient = httpClient
-    }
-
-    func fetchPokemonList() -> AnyPublisher<PokemonListDTO, HTTPClientError> {
-        let endpoint = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0"
-        return httpClient.makeRequest(endpoint: endpoint)
-            .decode(PokemonListDTO.self)
     }
     
     func fetchPokemonDetails() -> AnyPublisher<[PokemonDTO], HTTPClientError> {
@@ -33,5 +28,23 @@ final class PokemonDataSource: PokemonDataSourceType {
                     .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
+    }
+    
+    func downloadImage(from url: String, key: String) -> AnyPublisher<UIImage, ImageDownloadError> {
+        httpClient.makeRequest(endpoint: url)
+            .tryMap { data in
+                guard let image = UIImage(data: data) else { throw HTTPClientError.parsingError }
+                return image
+            }
+            .mapError { _ in return ImageDownloadError.downloadFailed }
+            .eraseToAnyPublisher()
+    }
+}
+
+private extension PokemonDataSource {
+    func fetchPokemonList() -> AnyPublisher<PokemonListDTO, HTTPClientError> {
+        let endpoint = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0"
+        return httpClient.makeRequest(endpoint: endpoint)
+            .decode(PokemonListDTO.self)
     }
 }

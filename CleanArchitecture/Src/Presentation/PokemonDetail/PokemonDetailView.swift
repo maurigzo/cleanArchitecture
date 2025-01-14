@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct PokemonDetailView: View {
-    let pokemon: Pokemon
-    
+    private let pokemon: Pokemon
+
+    init(pokemon: Pokemon) {
+        self.pokemon = pokemon
+    }
+
     var body: some View {
         ScrollView {
             VStack {
@@ -20,27 +24,35 @@ struct PokemonDetailView: View {
         }
     }
 }
-    
+
 private extension PokemonDetailView {
     var header: some View {
         HStack {
             Spacer()
             VStack {
-                Image(uiImage: pokemon.image ?? UIImage(named: "placeholder")!)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 160, height: 160)
-                    .padding(.top, 24)
-                Text("#\(pokemon.id) \(pokemon.name.uppercased())")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.vertical, 32)
+                pokemonImage
+                pokemonName
             }
             Spacer()
         }
         .background(headerBackground)
     }
-    
+
+    var pokemonImage: some View {
+        Image(uiImage: pokemon.image ?? UIImage(named: "placeholder")!)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 160, height: 160)
+            .padding(.top, 24)
+    }
+
+    var pokemonName: some View {
+        Text("#\(pokemon.id) \(pokemon.name.uppercased())")
+            .font(.largeTitle)
+            .bold()
+            .padding(.vertical, 32)
+    }
+
     var headerBackground: some View {
         LinearGradient(
             gradient: Gradient(colors: pokemon.types.map { Color(uiColor: $0.color) }),

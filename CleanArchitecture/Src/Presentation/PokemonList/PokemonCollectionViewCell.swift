@@ -1,10 +1,3 @@
-//
-//  PokemonCollectionViewCell.swift
-//  CleanArchitecture
-//
-//  Created by Gonzalo Mauricio Ramirez on 13/01/2025.
-//
-
 import UIKit
 
 class PokemonCollectionViewCell: UICollectionViewCell {
@@ -45,7 +38,7 @@ class PokemonCollectionViewCell: UICollectionViewCell {
 
 private extension PokemonCollectionViewCell {
     func setUpContentView() {
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = .systemBackground
         contentView.layer.cornerRadius = 8
         contentView.layer.masksToBounds = true
     }
@@ -79,7 +72,7 @@ private extension PokemonCollectionViewCell {
         titleLabel.font = .boldSystemFont(ofSize: 16)
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
-        titleLabel.textColor = .black
+        titleLabel.textColor = .label
         leftStackView.addArrangedSubview(titleLabel)
     }
 
@@ -120,7 +113,7 @@ private extension PokemonCollectionViewCell {
             let typeLabel = UILabel()
             typeLabel.text = type.name.capitalized
             typeLabel.font = .systemFont(ofSize: 14)
-            typeLabel.textColor = .black
+            typeLabel.textColor = .label
             typeLabel.backgroundColor = type.color
             typeLabel.layer.cornerRadius = 8
             typeLabel.layer.masksToBounds = true
@@ -159,7 +152,7 @@ private extension PokemonCollectionViewCell {
         let label = UILabel()
         label.text = text
         label.font = .systemFont(ofSize: 14)
-        label.textColor = .black
+        label.textColor = .label
         label.layer.masksToBounds = true
         label.textAlignment = .center
         label.layer.sublayerTransform = CATransform3DMakeTranslation(12, 0, 0)
@@ -167,7 +160,7 @@ private extension PokemonCollectionViewCell {
         
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.backgroundColor = .systemGray6
+        containerView.backgroundColor = .secondarySystemBackground
         containerView.layer.cornerRadius = 8
         containerView.addSubview(label)
         

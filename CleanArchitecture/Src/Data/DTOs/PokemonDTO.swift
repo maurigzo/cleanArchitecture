@@ -13,6 +13,7 @@ struct PokemonDTO: Codable {
     let sprites: SpritesDTO
     let weight: Double
     let height: Double
+    let stats: [PokemonStatDTO]
 }
 
 struct PokemonTypeDTO: Codable {

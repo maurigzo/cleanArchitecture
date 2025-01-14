@@ -5,6 +5,6 @@
 //  Created by Gonzalo Mauricio Ramirez on 14/01/2025.
 //
 
-struct PokemonType {
+struct PokemonType: Hashable {
     let name: String
 }

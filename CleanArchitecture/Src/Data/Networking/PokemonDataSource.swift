@@ -11,6 +11,7 @@ import UIKit
 
 final class PokemonDataSource: PokemonDataSourceType {
     private let httpClient: HTTPClient
+
     init(httpClient: HTTPClient = URLSessionHTTPClient()) {
         self.httpClient = httpClient
     }
@@ -32,9 +33,7 @@ final class PokemonDataSource: PokemonDataSourceType {
     func downloadImage(from url: String, key: String) -> AnyPublisher<UIImage, ImageDownloadError> {
         httpClient.makeRequest(endpoint: url)
             .tryMap { data in
-                guard let image = UIImage(data: data) else {
-                    throw HTTPClientError.parsingError
-                }
+                guard let image = UIImage(data: data) else { throw HTTPClientError.parsingError }
                 return image
             }
             .mapError { _ in return ImageDownloadError.downloadFailed }

@@ -38,7 +38,6 @@ class PokemonListViewController: UIViewController {
         setupCollectionView()
         bindViewModel()
         viewModel.fetchPokemonList()
-
     }
 
     private func setupCollectionView() {
@@ -48,7 +47,6 @@ class PokemonListViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.backgroundColor = .systemGray6
         collectionView.register(PokemonCollectionViewCell.self, forCellWithReuseIdentifier: "PokemonCell")
-
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -72,7 +70,7 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         pokemons.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "PokemonCell",
@@ -84,7 +82,7 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
         cell.update(with: pokemon)
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let pokemon = pokemons[indexPath.item]
         coordinator.showPokemonDetail(for: pokemon)

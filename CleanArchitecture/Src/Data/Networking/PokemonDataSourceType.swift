@@ -12,4 +12,3 @@ protocol PokemonDataSourceType {
     func fetchPokemonDetails() -> AnyPublisher<[PokemonDTO], HTTPClientError>
     func downloadImage(from url: String, key: String) -> AnyPublisher<UIImage, ImageDownloadError>
 }
-

@@ -16,7 +16,8 @@ struct Pokemon {
     var image: UIImage?
     let weight: Double
     let height: Double
-    
+    let stats: [PokemonStat]
+
     var heightWithUnit: String {
         "\(height) m"
     }
@@ -31,6 +32,7 @@ struct Pokemon {
         let imageURL = dto.sprites.other.officialArtwork.frontDefault
         let weight = dto.weight / 10.0
         let height = dto.height / 10.0
+        let stats = dto.stats.map { PokemonStat.build(from: $0) }
 
         return .init(
             id: dto.id,
@@ -39,7 +41,8 @@ struct Pokemon {
             types: types,
             imageURL: imageURL,
             weight: weight,
-            height: height
+            height: height,
+            stats: stats
         )
     }
 }

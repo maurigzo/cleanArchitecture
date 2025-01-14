@@ -34,4 +34,24 @@ final class PokemonDataSource: PokemonDataSourceType {
             }
             .eraseToAnyPublisher()
     }
+    
+    func fetchPokemonTypeList() -> AnyPublisher<PokemonTypeListDTO, HTTPClientError> {
+        let endpoint = "https://pokeapi.co/api/v2/type/"
+        return httpClient.makeRequest(endpoint: endpoint)
+            .decode(PokemonTypeListDTO.self)
+    }
+    
+    func fetchPokemonTypesDetails() -> AnyPublisher<[PokemonTypeDetailsDTO], HTTPClientError> {
+        fetchPokemonList()
+            .flatMap { pokemonTypeListDTO -> AnyPublisher<[PokemonTypeDetailsDTO], HTTPClientError> in
+                let publishers = pokemonTypeListDTO.results.compactMap { [weak self] pokemonTypeListResultDTO in
+                    self?.httpClient.makeRequest(endpoint: pokemonTypeListResultDTO.url)
+                        .decode(PokemonTypeDetailsDTO.self)
+                }
+                return Publishers.MergeMany(publishers)
+                    .collect()
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
 }

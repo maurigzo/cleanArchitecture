@@ -10,15 +10,21 @@ import Foundation
 
 class PokemonListViewModel: ObservableObject {
     @Published var pokemons: [Pokemon] = []
-    private let repository: PokemonListRepositoryType
+    @Published var pokemonTypes: [PokemonType] = []
+    private let fetchPokemonListUseCase: FetchPokemonListUseCaseType
+    private let fetchPokemonTypesUseCase: FetchPokemonTypesUseCaseType
     private var cancellables = Set<AnyCancellable>()
 
-    init(repository: PokemonListRepositoryType = PokemonRepository()) {
-        self.repository = repository
+    init(
+        fetchPokemonListUseCase: FetchPokemonListUseCaseType = FetchPokemonListUseCase(),
+        fetchPokemonTypesUseCase: FetchPokemonTypesUseCaseType = FetchPokemonTypesUseCase()
+    ) {
+        self.fetchPokemonListUseCase = fetchPokemonListUseCase
+        self.fetchPokemonTypesUseCase = fetchPokemonTypesUseCase
     }
 
     func fetchPokemonList() {
-        repository.fetchPokemonList()
+        fetchPokemonListUseCase.execute()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
@@ -26,6 +32,19 @@ class PokemonListViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] pokemons in
                 self?.pokemons = pokemons
+            })
+            .store(in: &cancellables)
+    }
+    
+    func fetchPokemonTypes() {
+        fetchPokemonTypesUseCase.execute()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("Error fetching Pokémon list: \(error)")
+                }
+            }, receiveValue: { [weak self] pokemonTypes in
+                self?.pokemonTypes = pokemonTypes
             })
             .store(in: &cancellables)
     }

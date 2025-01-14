@@ -10,4 +10,5 @@ import Combine
 protocol PokemonDataSourceType {
     func fetchPokemonList() -> AnyPublisher<PokemonListDTO, HTTPClientError>
     func fetchPokemonDetails() -> AnyPublisher<[PokemonDTO], HTTPClientError>
+    func fetchPokemonTypesDetails() -> AnyPublisher<[PokemonTypeDetailsDTO], HTTPClientError>
 }

@@ -37,6 +37,8 @@ class PokemonListViewController: UIViewController {
         setupCollectionView()
         bindViewModel()
         viewModel.fetchPokemonList()
+        viewModel.fetchPokemonTypes()
+
     }
 
     private func setupCollectionView() {

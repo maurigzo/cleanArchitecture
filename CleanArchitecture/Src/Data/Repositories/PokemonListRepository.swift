@@ -1,5 +1,5 @@
 //
-//  PokemonRepository.swift
+//  PokemonListRepository.swift
 //  CleanArchitecture
 //
 //  Created by Gonzalo Mauricio Ramirez on 11/01/2025.
@@ -7,7 +7,7 @@
 
 import Combine
 
-final class PokemonRepository: PokemonListRepositoryType {
+final class PokemonListRepository: PokemonListRepositoryType {
     private let dataSource: PokemonDataSourceType
     private let errorMapper: DomainErrorMapper
 

@@ -11,10 +11,12 @@ struct PokemonDetailView: View {
     let pokemon: Pokemon
     
     var body: some View {
-        VStack(spacing: 16) {
-            header
-            details
-            Spacer()
+        ScrollView {
+            VStack {
+                header
+                details
+                Spacer()
+            }
         }
     }
 }
@@ -27,19 +29,18 @@ private extension PokemonDetailView {
                 Image(uiImage: pokemon.image ?? UIImage(named: "placeholder")!)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 200, height: 200)
-                    .padding(.top, 40)
-                
+                    .frame(width: 160, height: 160)
+                    .padding(.top, 24)
                 Text("#\(pokemon.id) \(pokemon.name.uppercased())")
                     .font(.largeTitle)
                     .bold()
-                    .padding(.vertical, 40)
+                    .padding(.vertical, 32)
             }
-            Spacer()c
+            Spacer()
         }
         .background(headerBackground)
     }
-
+    
     var headerBackground: some View {
         LinearGradient(
             gradient: Gradient(colors: pokemon.types.map { Color(uiColor: $0.color) }),
@@ -62,7 +63,7 @@ private extension PokemonDetailView {
                 Text(pokemonType.name.capitalized)
                     .font(.headline)
                     .padding(.horizontal, 32)
-                    .padding(.vertical, 16)
+                    .padding(.vertical, 12)
                     .foregroundStyle(.primary)
                     .background(Color(uiColor:pokemonType.color))
                     .clipShape(Capsule())
@@ -80,7 +81,11 @@ private extension PokemonDetailView {
     var baseStats: some View {
         VStack {
             baseStatsTitle
+            ForEach(pokemon.stats, id: \.self) { stat in
+                progressView(stat)
+            }
         }
+        .padding(.top, 8)
     }
     
     var baseStatsTitle: some View {
@@ -97,5 +102,19 @@ private extension PokemonDetailView {
                 .foregroundStyle(.secondary)
         }
         .frame(minWidth: 100)
+    }
+    
+    func progressView(_ stat: PokemonStat) -> some View {
+        HStack {
+            ProgressView(value: Double(stat.baseValue), total: Double(stat.maxValue)) {
+                Text(stat.name.capitalized)
+                    .font(.callout)
+            }
+            .progressViewStyle(.linear)
+            .tint(stat.color)
+            Text(stat.baseValue.description)
+                .font(.callout)
+        }
+        .padding(.horizontal, 32)
     }
 }

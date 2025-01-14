@@ -32,7 +32,7 @@ class PokemonCollectionViewCell: UICollectionViewCell {
         titleLabel.text = "#\(pokemon.id) \(pokemon.name.uppercased())"
         pokemonImageView.image = pokemon.image ?? UIImage(named: "placeholder")
         updateTypes(pokemon.types)
-        updateHeightWeight(height: pokemon.height, weight: pokemon.weight)
+        updateHeightWeight(height: pokemon.heightWithUnit, weight: pokemon.weightWithUnit)
     }
 }
 
@@ -126,9 +126,9 @@ private extension PokemonCollectionViewCell {
         }
     }
 
-    func updateHeightWeight(height: Double, weight: Double) {
-        let heightView = createCapsuleContainer(with: "📏 Height: \(height) m")
-        let weightView = createCapsuleContainer(with: "⚖️ Weight: \(weight) kg")
+    func updateHeightWeight(height: String, weight: String) {
+        let heightView = createCapsuleContainer(with: "📏 Height: \(height)")
+        let weightView = createCapsuleContainer(with: "⚖️ Weight: \(weight)")
         heightWeightStackView.addArrangedSubview(heightView)
         heightWeightStackView.addArrangedSubview(weightView)
     }

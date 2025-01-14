@@ -16,6 +16,14 @@ struct Pokemon {
     var image: UIImage?
     let weight: Double
     let height: Double
+    
+    var heightWithUnit: String {
+        "\(height) m"
+    }
+    
+    var weightWithUnit: String {
+        "\(weight) kg"
+    }
 
     static func build(from dto: PokemonDTO) -> Self {
         let abilities: [Ability] = dto.abilities.map { Ability.build(from: $0) }

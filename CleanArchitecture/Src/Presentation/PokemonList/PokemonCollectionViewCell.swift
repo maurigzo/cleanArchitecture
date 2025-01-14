@@ -11,6 +11,7 @@ class PokemonCollectionViewCell: UICollectionViewCell {
     private let titleLabel = UILabel()
     private let pokemonImageView = UIImageView()
     private let typesStackView = UIStackView()
+    private let heightWeightStackView = UIStackView()
     private let mainStackView = UIStackView()
     private let leftStackView = UIStackView()
 
@@ -30,6 +31,7 @@ class PokemonCollectionViewCell: UICollectionViewCell {
         setUpTitle()
         setUpImage()
         setUpTypesStackView()
+        setUpHeightWeightStackView()
     }
     
     func update(with pokemon: Pokemon) {
@@ -37,68 +39,78 @@ class PokemonCollectionViewCell: UICollectionViewCell {
         titleLabel.text = "#\(pokemon.id) \(pokemon.name.uppercased())"
         pokemonImageView.image = pokemon.image ?? UIImage(named: "placeholder")
         updateTypes(pokemon.types)
+        updateHeightWeight(height: pokemon.height, weight: pokemon.weight)
     }
 }
 
 private extension PokemonCollectionViewCell {
     func setUpContentView() {
-        contentView.backgroundColor = .systemGray6
+        contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 8
         contentView.layer.masksToBounds = true
     }
 
     func setUpMainStackView() {
-            mainStackView.axis = .horizontal
-            mainStackView.spacing = 16
-            mainStackView.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview(mainStackView)
-            NSLayoutConstraint.activate([
-                mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-                mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-                mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-                mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
-            ])
-        }
+        mainStackView.axis = .horizontal
+        mainStackView.spacing = 16
+        mainStackView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(mainStackView)
+        NSLayoutConstraint.activate([
+            mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
+        ])
+    }
 
     func setUpLeftStackView() {
-            leftStackView.axis = .vertical
-            leftStackView.spacing = 8
-            leftStackView.alignment = .leading
-            leftStackView.translatesAutoresizingMaskIntoConstraints = false
+        leftStackView.axis = .vertical
+        leftStackView.spacing = 8
+        leftStackView.alignment = .leading
+        leftStackView.translatesAutoresizingMaskIntoConstraints = false
 
-            leftStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-            leftStackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        leftStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        leftStackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
-            mainStackView.addArrangedSubview(leftStackView)
-        }
+        mainStackView.addArrangedSubview(leftStackView)
+    }
 
     func setUpTitle() {
         titleLabel.font = .boldSystemFont(ofSize: 16)
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
+        titleLabel.textColor = .black
         leftStackView.addArrangedSubview(titleLabel)
     }
 
     func setUpImage() {
-            pokemonImageView.contentMode = .scaleAspectFit
-            pokemonImageView.clipsToBounds = true
+        pokemonImageView.contentMode = .scaleAspectFit
+        pokemonImageView.clipsToBounds = true
 
-            pokemonImageView.setContentHuggingPriority(.required, for: .horizontal)
-            pokemonImageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        pokemonImageView.setContentHuggingPriority(.required, for: .horizontal)
+        pokemonImageView.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-            mainStackView.addArrangedSubview(pokemonImageView)
+        mainStackView.addArrangedSubview(pokemonImageView)
 
-            NSLayoutConstraint.activate([
-                pokemonImageView.widthAnchor.constraint(equalTo: pokemonImageView.heightAnchor)
-            ])
-        }
+        NSLayoutConstraint.activate([
+            pokemonImageView.widthAnchor.constraint(equalTo: pokemonImageView.heightAnchor)
+        ])
+    }
 
     func setUpTypesStackView() {
         typesStackView.axis = .horizontal
-        typesStackView.spacing = 8
+        typesStackView.spacing = 4
         typesStackView.alignment = .leading
         typesStackView.translatesAutoresizingMaskIntoConstraints = false
         leftStackView.addArrangedSubview(typesStackView)
+    }
+
+    func setUpHeightWeightStackView() {
+        heightWeightStackView.axis = .vertical
+        heightWeightStackView.spacing = 12
+        heightWeightStackView.alignment = .leading
+        heightWeightStackView.translatesAutoresizingMaskIntoConstraints = false
+        leftStackView.addArrangedSubview(heightWeightStackView)
     }
 
     func updateTypes(_ types: [PokemonType]) {
@@ -108,7 +120,7 @@ private extension PokemonCollectionViewCell {
             let typeLabel = UILabel()
             typeLabel.text = type.name.capitalized
             typeLabel.font = .systemFont(ofSize: 14)
-            typeLabel.textColor = .white
+            typeLabel.textColor = .black
             typeLabel.backgroundColor = type.color
             typeLabel.layer.cornerRadius = 8
             typeLabel.layer.masksToBounds = true
@@ -135,9 +147,45 @@ private extension PokemonCollectionViewCell {
         }
     }
 
+    func updateHeightWeight(height: Double, weight: Double) {
+        heightWeightStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        let heightView = createCapsuleContainer(with: "📏 Height: \(height) m")
+        let weightView = createCapsuleContainer(with: "⚖️ Weight: \(weight) kg")
+        heightWeightStackView.addArrangedSubview(heightView)
+        heightWeightStackView.addArrangedSubview(weightView)
+    }
+    
+    func createCapsuleContainer(with text: String) -> UIView {
+        let label = UILabel()
+        label.text = text
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .black
+        label.layer.masksToBounds = true
+        label.textAlignment = .center
+        label.layer.sublayerTransform = CATransform3DMakeTranslation(12, 0, 0)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = .systemGray6
+        containerView.layer.cornerRadius = 8
+        containerView.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
+            label.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8),
+            label.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -4),
+            label.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -8),
+            label.heightAnchor.constraint(greaterThanOrEqualToConstant: 28),
+            label.widthAnchor.constraint(greaterThanOrEqualToConstant: 80)
+        ])
+        return containerView
+    }
+
     func resetViews() {
         titleLabel.text = nil
         pokemonImageView.image = nil
         typesStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        heightWeightStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
 }

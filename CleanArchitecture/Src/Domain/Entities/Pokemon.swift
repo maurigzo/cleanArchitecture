@@ -21,8 +21,8 @@ struct Pokemon {
         let abilities: [Ability] = dto.abilities.map { Ability.build(from: $0) }
         let types: [PokemonType] = dto.types.map { PokemonType(name: $0.type.name) }
         let imageURL = dto.sprites.other.officialArtwork.frontDefault
-        let weight: Double = Double(dto.weight) / 10.0
-        let height = dto.height
+        let weight = dto.weight / 10.0
+        let height = dto.height / 10.0
 
         return .init(
             id: dto.id,
@@ -30,8 +30,8 @@ struct Pokemon {
             abilities: abilities,
             types: types,
             imageURL: imageURL,
-            weight: dto.weight,
-            height: dto.height
+            weight: weight,
+            height: height
         )
     }
 }

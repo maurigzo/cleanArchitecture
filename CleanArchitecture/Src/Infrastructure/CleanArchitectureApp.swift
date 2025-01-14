@@ -12,6 +12,7 @@ struct CleanArchitectureApp: App {
     var body: some Scene {
         WindowGroup {
             PokemonListViewControllerWrapper(viewModel: PokemonListViewModel())
+                .background(Color(cgColor: UIColor.systemGray6.cgColor))
         }
     }
 }

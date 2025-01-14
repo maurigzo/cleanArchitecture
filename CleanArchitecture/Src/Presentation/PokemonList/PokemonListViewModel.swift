@@ -32,7 +32,7 @@ class PokemonListViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] pokemons in
                 guard let self = self else { return }
-                self.pokemons = pokemons
+                self.pokemons = pokemons.sorted { $0.id < $1.id }
                 self.downloadImages(for: pokemons)
             })
             .store(in: &cancellables)

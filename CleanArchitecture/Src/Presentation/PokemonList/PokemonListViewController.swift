@@ -23,7 +23,7 @@ class PokemonListViewController: UIViewController {
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 20, height: 160)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 20, height: 200)
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 
         super.init(nibName: nil, bundle: nil)
@@ -46,7 +46,7 @@ class PokemonListViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemGray6
         collectionView.register(PokemonCollectionViewCell.self, forCellWithReuseIdentifier: "PokemonCell")
 
         NSLayoutConstraint.activate([
@@ -88,15 +88,5 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let pokemon = pokemons[indexPath.item]
         coordinator.showPokemonDetail(for: pokemon)
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        let width = collectionView.bounds.width - 20
-        let height: CGFloat = 160
-        return CGSize(width: width, height: height)
     }
 }

@@ -14,7 +14,3 @@ struct AbilityDetailsDTO: Codable {
     let name: String
     let url: String
 }
-
-struct SpriteDTO: Codable {
-    let backDefault: String
-}

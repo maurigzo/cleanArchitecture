@@ -6,9 +6,10 @@
 //
 
 import Combine
+import UIKit
 
 protocol PokemonDataSourceType {
-    func fetchPokemonList() -> AnyPublisher<PokemonListDTO, HTTPClientError>
     func fetchPokemonDetails() -> AnyPublisher<[PokemonDTO], HTTPClientError>
-    func fetchPokemonTypesDetails() -> AnyPublisher<[PokemonTypeDetailsDTO], HTTPClientError>
+    func downloadImage(from url: String, key: String) -> AnyPublisher<UIImage, ImageDownloadError>
 }
+

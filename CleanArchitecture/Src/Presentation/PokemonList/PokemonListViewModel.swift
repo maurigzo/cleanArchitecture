@@ -7,22 +7,22 @@
 
 import Combine
 import Foundation
+import UIKit
 
 class PokemonListViewModel: ObservableObject {
     @Published var pokemons: [Pokemon] = []
-    @Published var pokemonTypes: [PokemonType] = []
     private let fetchPokemonListUseCase: FetchPokemonListUseCaseType
-    private let fetchPokemonTypesUseCase: FetchPokemonTypesUseCaseType
+    private let pokemonDataSource: PokemonDataSourceType
     private var cancellables = Set<AnyCancellable>()
-
+    
     init(
         fetchPokemonListUseCase: FetchPokemonListUseCaseType = FetchPokemonListUseCase(),
-        fetchPokemonTypesUseCase: FetchPokemonTypesUseCaseType = FetchPokemonTypesUseCase()
+        pokemonDataSource: PokemonDataSourceType = PokemonDataSource()
     ) {
         self.fetchPokemonListUseCase = fetchPokemonListUseCase
-        self.fetchPokemonTypesUseCase = fetchPokemonTypesUseCase
+        self.pokemonDataSource = pokemonDataSource
     }
-
+    
     func fetchPokemonList() {
         fetchPokemonListUseCase.execute()
             .receive(on: DispatchQueue.main)
@@ -31,21 +31,31 @@ class PokemonListViewModel: ObservableObject {
                     print("Error fetching Pokémon list: \(error)")
                 }
             }, receiveValue: { [weak self] pokemons in
-                self?.pokemons = pokemons
+                guard let self = self else { return }
+                self.pokemons = pokemons
+                self.downloadImages(for: pokemons)
             })
             .store(in: &cancellables)
     }
     
-    func fetchPokemonTypes() {
-        fetchPokemonTypesUseCase.execute()
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
-                    print("Error fetching Pokémon list: \(error)")
+    private func downloadImages(for pokemons: [Pokemon]) {
+        let imagePublishers = pokemons.map { pokemon in
+            pokemonDataSource.downloadImage(from: pokemon.imageURL, key: "\(pokemon.id)")
+                .catch { _ in Just(UIImage(named: "placeholder") ?? UIImage()) }
+                .map { image -> Pokemon in
+                    var updatedPokemon = pokemon
+                    updatedPokemon.image = image
+                    return updatedPokemon
                 }
-            }, receiveValue: { [weak self] pokemonTypes in
-                self?.pokemonTypes = pokemonTypes
+        }
+
+        Publishers.MergeMany(imagePublishers)
+            .collect()
+            .receive(on: DispatchQueue.main) // Asegurar actualización en la UI
+            .sink(receiveValue: { [weak self] updatedPokemons in
+                self?.pokemons = updatedPokemons
             })
             .store(in: &cancellables)
     }
 }
+

@@ -48,12 +48,11 @@ class PokemonListViewModel: ObservableObject {
                     return updatedPokemon
                 }
         }
-
         Publishers.MergeMany(imagePublishers)
             .collect()
-            .receive(on: DispatchQueue.main) // Asegurar actualización en la UI
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] updatedPokemons in
-                self?.pokemons = updatedPokemons
+                self?.pokemons = updatedPokemons.sorted { $0.id < $1.id }
             })
             .store(in: &cancellables)
     }

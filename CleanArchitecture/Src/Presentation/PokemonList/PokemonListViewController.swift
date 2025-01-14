@@ -20,11 +20,12 @@ class PokemonListViewController: UIViewController {
         self.coordinator = coordinator
 
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 20, height: 150)
+        layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 20, height: 160)
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -37,7 +38,6 @@ class PokemonListViewController: UIViewController {
         setupCollectionView()
         bindViewModel()
         viewModel.fetchPokemonList()
-        viewModel.fetchPokemonTypes()
 
     }
 
@@ -72,7 +72,7 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         pokemons.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "PokemonCell",
@@ -81,12 +81,22 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
             return UICollectionViewCell()
         }
         let pokemon = pokemons[indexPath.item]
-        cell.configure(with: pokemon)
+        cell.update(with: pokemon)
         return cell
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let pokemon = pokemons[indexPath.item]
         coordinator.showPokemonDetail(for: pokemon)
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        let width = collectionView.bounds.width - 20
+        let height: CGFloat = 160
+        return CGSize(width: width, height: height)
     }
 }

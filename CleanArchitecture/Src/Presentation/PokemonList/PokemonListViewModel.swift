@@ -7,24 +7,27 @@
 
 import Combine
 import Foundation
-import UIKit
 
 class PokemonListViewModel: ObservableObject {
     @Published var pokemons: [Pokemon] = []
+    @Published var isLoading: Bool = false
+    private var currentOffset: Int = 0
+    private let pageSize = 20
     private let fetchPokemonListUseCase: FetchPokemonListUseCaseType
-    private let pokemonDataSource: PokemonDataSourceType
     private var cancellables = Set<AnyCancellable>()
 
-    init(
-        fetchPokemonListUseCase: FetchPokemonListUseCaseType = FetchPokemonListUseCase(),
-        pokemonDataSource: PokemonDataSourceType = PokemonDataSource()
-    ) {
+    init(fetchPokemonListUseCase: FetchPokemonListUseCaseType = FetchPokemonListUseCase()) {
         self.fetchPokemonListUseCase = fetchPokemonListUseCase
-        self.pokemonDataSource = pokemonDataSource
     }
 
     func fetchPokemonList() {
-        fetchPokemonListUseCase.execute()
+        guard !isLoading else { return }
+
+        DispatchQueue.main.async { [weak self] in
+            self?.isLoading = true
+        }
+
+        fetchPokemonListUseCase.execute(limit: pageSize, offset: currentOffset)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
@@ -32,27 +35,11 @@ class PokemonListViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] pokemons in
                 guard let self = self else { return }
-                self.pokemons = pokemons.sorted { $0.id < $1.id }
-                self.downloadImages(for: pokemons)
-            })
-            .store(in: &cancellables)
-    }
-
-    private func downloadImages(for pokemons: [Pokemon]) {
-        let imagePublishers = pokemons.map { pokemon in
-            pokemonDataSource.downloadImage(from: pokemon.imageURL, key: "\(pokemon.id)")
-                .catch { _ in Just(UIImage(named: "placeholder") ?? UIImage()) }
-                .map { image -> Pokemon in
-                    var updatedPokemon = pokemon
-                    updatedPokemon.image = image
-                    return updatedPokemon
+                self.pokemons.append(contentsOf: pokemons.sorted { $0.id < $1.id })
+                self.currentOffset += self.pageSize
+                DispatchQueue.main.async {
+                    self.isLoading = false
                 }
-        }
-        Publishers.MergeMany(imagePublishers)
-            .collect()
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] updatedPokemons in
-                self?.pokemons = updatedPokemons.sorted { $0.id < $1.id }
             })
             .store(in: &cancellables)
     }

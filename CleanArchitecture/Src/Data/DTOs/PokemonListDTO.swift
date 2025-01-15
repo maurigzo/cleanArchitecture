@@ -6,7 +6,5 @@
 //
 
 struct PokemonListDTO: Codable {
-    let next: String
-    let previous: String?
     let results: [PokemonListResultDTO]
 }

@@ -10,7 +10,6 @@ import UIKit
 struct Pokemon {
     let id: Int
     let name: String
-    let abilities: [Ability]
     let types: [PokemonType]
     let imageURL: String
     var image: UIImage?

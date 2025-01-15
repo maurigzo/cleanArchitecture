@@ -16,10 +16,10 @@ class PokemonListViewModel: ObservableObject {
     private let fetchPokemonListUseCase: FetchPokemonListUseCaseType
     private var cancellables = Set<AnyCancellable>()
 
-    init(fetchPokemonListUseCase: FetchPokemonListUseCaseType = FetchPokemonListUseCase()) {
+    init(fetchPokemonListUseCase: FetchPokemonListUseCaseType = FetchPokemonListUseCase()) {   
         self.fetchPokemonListUseCase = fetchPokemonListUseCase
     }
-
+    
     func fetchPokemonList() {
         guard !isLoading else { return }
 

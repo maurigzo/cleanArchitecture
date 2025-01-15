@@ -22,10 +22,9 @@ final class URLSessionHTTPClient: HTTPClient {
             return Fail(error: HTTPClientError.clientError)
                 .eraseToAnyPublisher()
         }
-        return URLSession.shared.dataTaskPublisher(for: endpointURL)
+        return session.dataTaskPublisher(for: endpointURL)
             .tryMap { [weak self] data, response in
-                guard let self else { throw HTTPClientError.clientError }
-                guard let httpResponse = response as? HTTPURLResponse else { throw HTTPClientError.clientError }
+                guard let self, let httpResponse = response as? HTTPURLResponse else { throw HTTPClientError.clientError }
                 guard httpResponse.statusCode == 200 else { throw self.errorResolver.resolve(statusCode: httpResponse.statusCode) }
                 return data
             }

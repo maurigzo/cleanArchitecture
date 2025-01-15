@@ -1,6 +1,6 @@
 //
 //  FetchPokemonListUseCaseTests.swift
-//  CleanArchitecture
+//  CleanArchitectureTests
 //
 //  Created by Gonzalo Mauricio Ramirez on 14/01/2025.
 //
@@ -36,7 +36,7 @@ final class FetchPokemonListUseCaseTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Fetch Pokemon List")
         
         // Act
-        sut.execute()
+        sut.execute(limit: 20, offset: 0)
             .sink(receiveCompletion: { completion in
                 if case .failure = completion {
                     XCTFail("Expected success but got failure")
@@ -59,7 +59,7 @@ final class FetchPokemonListUseCaseTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Fetch Pokemon List Failure")
         
         // Act
-        sut.execute()
+        sut.execute(limit: 20, offset: 0)
             .sink(receiveCompletion: { completion in
                 // Assert
                 if case let .failure(error) = completion {
@@ -83,14 +83,5 @@ final class FetchPokemonListUseCaseTests: XCTestCase {
         
         // Assert
         XCTAssertNil(weakSUT, "The FetchPokemonListUseCase instance was not deallocated, indicating a memory leak.")
-    }
-}
-
-final class PokemonListRepositoryMock: PokemonListRepositoryType {
-    var result: Result<[Pokemon], DomainError>?
-
-    func fetchPokemonList() -> AnyPublisher<[Pokemon], DomainError> {
-        guard let result = result else { return Fail(error: .generic).eraseToAnyPublisher() }
-        return result.publisher.eraseToAnyPublisher()
     }
 }

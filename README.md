@@ -31,7 +31,8 @@ Cada capa es independiente y fácilmente testeable, asegurando modularidad y man
 - **SwiftUI**: Para las pantallas de detalles.
 - **UIKit**: Para la navegación y la lista principal.
 - **Combine**: Para manejar flujos reactivos.
-  
+- **XCTest**: Para pruebas unitarias de casos de uso y validación de memoria.
+
 ---
 
 ## 🧑🏻‍💻 Autor

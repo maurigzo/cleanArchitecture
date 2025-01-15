@@ -22,7 +22,7 @@ final class PokemonListViewModelTests: XCTestCase {
     }
     
     override func tearDown() {
-        cancellables = nilc
+        cancellables = nil
         sut = nil
         useCase = nil
         super.tearDown()

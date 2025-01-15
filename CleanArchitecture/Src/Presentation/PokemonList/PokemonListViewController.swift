@@ -35,6 +35,7 @@ class PokemonListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Pokédex"
         setupCollectionView()
         bindViewModel()
         viewModel.fetchPokemonList()

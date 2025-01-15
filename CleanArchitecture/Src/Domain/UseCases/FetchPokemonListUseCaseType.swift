@@ -8,5 +8,5 @@
 import Combine
 
 protocol FetchPokemonListUseCaseType {
-    func execute() -> AnyPublisher<[Pokemon], DomainError>
+    func execute(limit: Int, offset: Int) -> AnyPublisher<[Pokemon], DomainError>
 }

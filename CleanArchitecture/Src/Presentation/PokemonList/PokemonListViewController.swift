@@ -14,33 +14,35 @@ class PokemonListViewController: UIViewController {
     private let coordinator: Coordinator
     private var cancellables = Set<AnyCancellable>()
     private var pokemons: [Pokemon] = []
-
+    
     init(viewModel: PokemonListViewModel, coordinator: Coordinator) {
         self.viewModel = viewModel
         self.coordinator = coordinator
-
+        
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 20, height: 200)
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
+        
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
         bindViewModel()
         viewModel.fetchPokemonList()
     }
+}
 
-    private func setupCollectionView() {
+private extension PokemonListViewController {
+    func setupCollectionView() {
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
@@ -54,8 +56,8 @@ class PokemonListViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-
-    private func bindViewModel() {
+    
+    func bindViewModel() {
         viewModel.$pokemons
             .receive(on: DispatchQueue.main)
             .sink { [weak self] pokemons in
@@ -86,5 +88,15 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let pokemon = pokemons[indexPath.item]
         coordinator.showPokemonDetail(for: pokemon)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let height = scrollView.frame.size.height
+
+        if offsetY > contentHeight - height * 2 && !viewModel.isLoading {
+            viewModel.fetchPokemonList()
+        }
     }
 }

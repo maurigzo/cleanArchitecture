@@ -14,7 +14,7 @@ final class FetchPokemonListUseCase: FetchPokemonListUseCaseType {
         self.pokemonListRepository = pokemonListRepository
     }
 
-    func execute() -> AnyPublisher<[Pokemon], DomainError> {
-        pokemonListRepository.fetchPokemonList()
+    func execute(limit: Int, offset: Int) -> AnyPublisher<[Pokemon], DomainError> {
+        pokemonListRepository.fetchPokemonList(limit: limit, offset: offset)
     }
 }

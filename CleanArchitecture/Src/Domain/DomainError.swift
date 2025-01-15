@@ -11,4 +11,5 @@ enum DomainError: Error {
     case clientError
     case tooManyRequestsError
     case serverError
+    case imageDownloadError
 }

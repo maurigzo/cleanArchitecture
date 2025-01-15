@@ -1,10 +1,11 @@
 //
-//  File.swift
-//  CleanArchitecture
+//  PokemonDTO+Mock.swift
+//  CleanArchitectureTests
 //
 //  Created by Gonzalo Mauricio Ramirez on 15/01/2025.
 //
 
+@testable import CleanArchitecture
 
 extension PokemonDTO {
     static func squirtleMock() -> PokemonDTO {

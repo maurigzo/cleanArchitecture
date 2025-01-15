@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Pokemon {
+struct Pokemon: Equatable {
     let id: Int
     let name: String
     let types: [PokemonType]

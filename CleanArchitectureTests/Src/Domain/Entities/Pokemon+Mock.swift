@@ -1,6 +1,6 @@
 //
 //  Pokemon+Mock.swift
-//  CleanArchitecture
+//  CleanArchitectureTests
 //
 //  Created by Gonzalo Mauricio Ramirez on 14/01/2025.
 //
@@ -13,8 +13,8 @@ extension Pokemon {
         name: "Bulbasaur",
         types: [PokemonType(name: "grass"), PokemonType(name: "poison")],
         imageURL: "",
-        weight: 69,
-        height: 70,
+        weight: 6.9,
+        height: 0.7,
         stats: [
             PokemonStat(name: "hp", baseValue: 45),
             PokemonStat(name: "attack", baseValue: 49)

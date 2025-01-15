@@ -30,20 +30,14 @@ private extension PokemonDetailView {
         HStack {
             Spacer()
             VStack {
-                pokemonImage
+                if let image = pokemon.image {
+                    pokemonImage(image: image)
+                }
                 pokemonName
             }
             Spacer()
         }
         .background(headerBackground)
-    }
-
-    var pokemonImage: some View {
-        Image(uiImage: pokemon.image ?? UIImage(named: "placeholder")!)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 160, height: 160)
-            .padding(.top, 24)
     }
 
     var pokemonName: some View {
@@ -103,6 +97,14 @@ private extension PokemonDetailView {
     var baseStatsTitle: some View {
         Text("Base Stats")
             .font(.title)
+    }
+    
+    func pokemonImage(image: UIImage) -> some View {
+        Image(uiImage: image)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 160, height: 160)
+            .padding(.top, 24)
     }
     
     func kpi(key: String, value: String) -> some View {

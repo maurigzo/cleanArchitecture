@@ -16,16 +16,6 @@ class PokemonCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    private func setupViews() {
-        setUpContentView()
-        setUpMainStackView()
-        setUpLeftStackView()
-        setUpTitle()
-        setUpImage()
-        setUpTypesStackView()
-        setUpHeightWeightStackView()
-    }
     
     func update(with pokemon: Pokemon) {
         resetViews()
@@ -37,6 +27,16 @@ class PokemonCollectionViewCell: UICollectionViewCell {
 }
 
 private extension PokemonCollectionViewCell {
+    func setupViews() {
+        setUpContentView()
+        setUpMainStackView()
+        setUpLeftStackView()
+        setUpTitle()
+        setUpImage()
+        setUpTypesStackView()
+        setUpHeightWeightStackView()
+    }
+
     func setUpContentView() {
         contentView.backgroundColor = .systemBackground
         contentView.layer.cornerRadius = 8

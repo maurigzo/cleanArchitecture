@@ -14,7 +14,7 @@ class PokemonListViewModel: ObservableObject {
     private let fetchPokemonListUseCase: FetchPokemonListUseCaseType
     private let pokemonDataSource: PokemonDataSourceType
     private var cancellables = Set<AnyCancellable>()
-
+    
     init(
         fetchPokemonListUseCase: FetchPokemonListUseCaseType = FetchPokemonListUseCase(),
         pokemonDataSource: PokemonDataSourceType = PokemonDataSource()
@@ -22,7 +22,7 @@ class PokemonListViewModel: ObservableObject {
         self.fetchPokemonListUseCase = fetchPokemonListUseCase
         self.pokemonDataSource = pokemonDataSource
     }
-
+    
     func fetchPokemonList() {
         fetchPokemonListUseCase.execute()
             .receive(on: DispatchQueue.main)
@@ -42,7 +42,7 @@ class PokemonListViewModel: ObservableObject {
         let imagePublishers = pokemons.map { pokemon in
             pokemonDataSource.downloadImage(from: pokemon.imageURL, key: "\(pokemon.id)")
                 .catch { _ in Just(UIImage(named: "placeholder") ?? UIImage()) }
-                .map { image -> Pokemon in
+                .map { image in
                     var updatedPokemon = pokemon
                     updatedPokemon.image = image
                     return updatedPokemon

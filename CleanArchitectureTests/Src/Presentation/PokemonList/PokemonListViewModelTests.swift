@@ -9,10 +9,6 @@ import XCTest
 import Combine
 @testable import CleanArchitecture
 
-import XCTest
-import Combine
-@testable import CleanArchitecture
-
 final class PokemonListViewModelTests: XCTestCase {
     private var sut: PokemonListViewModel!
     private var useCase: FetchPokemonListUseCaseMock!
@@ -26,7 +22,7 @@ final class PokemonListViewModelTests: XCTestCase {
     }
     
     override func tearDown() {
-        cancellables = nil
+        cancellables = nilc
         sut = nil
         useCase = nil
         super.tearDown()

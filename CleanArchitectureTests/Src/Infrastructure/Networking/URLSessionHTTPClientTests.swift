@@ -1,4 +1,3 @@
-
 //
 //  URLSessionHTTPClientTests.swift
 //  CleanArchitectureTests
@@ -12,13 +11,13 @@ import Combine
 
 final class URLSessionHTTPClientTests: XCTestCase {
     private var sut: URLSessionHTTPClient!
-    private var sessionMock: MockURLSession!
+    private var sessionMock: URLSessionMock!
     private var cancellables: Set<AnyCancellable>!
     private var errorResolver: URLSessionErrorResolver!
 
     override func setUp() {
         super.setUp()
-        sessionMock = MockURLSession()
+        sessionMock = URLSessionMock()
         errorResolver = URLSessionErrorResolver()
         sut = URLSessionHTTPClient(session: sessionMock, errorResolver: errorResolver)
         cancellables = []
@@ -110,23 +109,5 @@ final class URLSessionHTTPClientTests: XCTestCase {
         
         // Assert
         XCTAssertNil(weakSUT, "The URLSessionHTTPClient instance was not deallocated, indicating a memory leak.")
-    }
-}
-
-final class MockURLSession: URLSessionType {
-    var mockData: Data?
-    var mockResponse: URLResponse?
-    var mockError: URLError?
-
-    func publisher(for url: URL) -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
-        if let mockError = mockError {
-            return Fail(error: mockError).eraseToAnyPublisher()
-        } else {
-            let data = mockData ?? Data()
-            let response = mockResponse ?? URLResponse()
-            return Just((data: data, response: response))
-                .setFailureType(to: URLError.self)
-                .eraseToAnyPublisher()
-        }
     }
 }

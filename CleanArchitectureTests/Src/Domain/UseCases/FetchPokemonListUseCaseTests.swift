@@ -1,6 +1,6 @@
 //
 //  FetchPokemonListUseCaseTests.swift
-//  CleanArchitecture
+//  CleanArchitectureTests
 //
 //  Created by Gonzalo Mauricio Ramirez on 14/01/2025.
 //
@@ -83,14 +83,5 @@ final class FetchPokemonListUseCaseTests: XCTestCase {
         
         // Assert
         XCTAssertNil(weakSUT, "The FetchPokemonListUseCase instance was not deallocated, indicating a memory leak.")
-    }
-}
-
-final class PokemonListRepositoryMock: PokemonListRepositoryType {
-    var result: Result<[Pokemon], DomainError>?
-
-    func fetchPokemonList(limit: Int, offset: Int) -> AnyPublisher<[Pokemon], DomainError> {
-        guard let result = result else { return Fail(error: .generic).eraseToAnyPublisher() }
-        return result.publisher.eraseToAnyPublisher()
     }
 }

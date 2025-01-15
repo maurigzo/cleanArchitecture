@@ -7,7 +7,7 @@
 
 struct PokemonDTO: Codable {
     let id: Int
-    let name: String
+    let species: SpeciesDTO
     let abilities: [AbilityDTO]
     let types: [PokemonTypeDTO]
     let sprites: SpritesDTO
@@ -21,5 +21,9 @@ struct PokemonTypeDTO: Codable {
 }
 
 struct PokemonTypeDetailsDTO: Codable {
+    let name: String
+}
+
+struct SpeciesDTO: Codable {
     let name: String
 }

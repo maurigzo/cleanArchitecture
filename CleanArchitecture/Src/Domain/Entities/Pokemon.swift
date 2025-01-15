@@ -26,7 +26,7 @@ struct Pokemon {
         "\(weight) kg"
     }
 
-    static func build(from dto: PokemonDTO) -> Self {
+    static func build(from dto: PokemonDTO, image: UIImage?) -> Self {
         let abilities: [Ability] = dto.abilities.map { Ability.build(from: $0) }
         let types: [PokemonType] = dto.types.map { PokemonType(name: $0.type.name) }
         let imageURL = dto.sprites.other.officialArtwork.frontDefault
@@ -36,10 +36,11 @@ struct Pokemon {
 
         return .init(
             id: dto.id,
-            name: dto.name,
+            name: dto.species.name,
             abilities: abilities,
             types: types,
             imageURL: imageURL,
+            image: image,
             weight: weight,
             height: height,
             stats: stats

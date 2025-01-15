@@ -102,6 +102,15 @@ final class URLSessionHTTPClientTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1.0)
     }
+    
+    func testMemoryLeaks() {
+        // Act
+        weak var weakSUT = sut
+        sut = nil
+        
+        // Assert
+        XCTAssertNil(weakSUT, "The URLSessionHTTPClient instance was not deallocated, indicating a memory leak.")
+    }
 }
 
 final class MockURLSession: URLSessionType {

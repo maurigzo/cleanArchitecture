@@ -2,7 +2,7 @@
 //  PokemonDataSourceTests.swift
 //  CleanArchitectureTests
 //
-//  Created by Gonzalo Mauricio Ramirez on 14/01/2025.
+//  Created by Gonzalo Mauricio Ramirez on 15/01/2025.
 //
 
 import XCTest
@@ -121,6 +121,15 @@ final class PokemonDataSourceTests: XCTestCase {
             .store(in: &cancellables)
 
         wait(for: [expectation], timeout: 1.0)
+    }
+    
+    func testMemoryLeaks() {
+        // Act
+        weak var weakSUT = sut
+        sut = nil
+        
+        // Assert
+        XCTAssertNil(weakSUT, "The PokemonDataSource instance was not deallocated, indicating a memory leak.")
     }
 }
 

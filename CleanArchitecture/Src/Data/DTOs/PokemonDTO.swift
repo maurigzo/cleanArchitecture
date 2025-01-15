@@ -8,7 +8,6 @@
 struct PokemonDTO: Codable {
     let id: Int
     let species: SpeciesDTO
-    let abilities: [AbilityDTO]
     let types: [PokemonTypeDTO]
     let sprites: SpritesDTO
     let weight: Double
